@@ -2,7 +2,7 @@
 // Created by robin on 10/21/21.
 //
 #include "t2li.h"
-#include "NearProccess.h"
+#include "CentralProccess.h"
 #include <mutex>
 #include <thread>
 #include <iostream>
@@ -66,14 +66,14 @@ int main() {//this is called on pi boot
 }
 
 bool npt() {
-    NearProccess node = NearProccess();
+    CentralProccess node = CentralProccess();
 
     return node.start();
 
 
 }
 
-int NearProccess::start() {
+int CentralProccess::start() {
     bool restartingpi = false;
     while (!restartingpi) {
         if (!msgtoProccessEmpty()) {
@@ -140,7 +140,7 @@ void addmsgtoProccess(string incoming) {
     mu.unlock();
 }
 
-Generalmsg NearProccess::getmsgToProccess() {
+Generalmsg CentralProccess::getmsgToProccess() {
     Generalmsg msg;
     mu.lock();
     msg = msgToProccess.top();
@@ -150,7 +150,7 @@ Generalmsg NearProccess::getmsgToProccess() {
 }
 
 // functions to msgToPack
-void NearProccess::addmsgtoPack(const Generalmsg& outgoing) {
+void CentralProccess::addmsgtoPack(const Generalmsg& outgoing) {
     mu.lock();
     msgToPack.push(outgoing);
     mu.unlock();
@@ -229,7 +229,7 @@ Generalmsg getmsgFromCentral() {
 
 
 //piCommand
-int NearProccess::bashCmd(const string& cmd) {
+int CentralProccess::bashCmd(const string& cmd) {
     return system(cmd.c_str());
 }
 

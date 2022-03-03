@@ -1,4 +1,4 @@
-# Install script for directory: /home/robin/near-station
+# Install script for directory: /home/robin/CLionProjects/CentralStation
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/robin/near-station/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/robin/CLionProjects/CentralStation/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

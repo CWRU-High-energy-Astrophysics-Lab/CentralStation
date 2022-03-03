@@ -14,7 +14,7 @@
 #include "msg_outline/Cmdmsg.h"
 #include "msg_outline/MsgHistory.h"
 #include "msg_outline/Logmsg.h"
-#include "xbeeinterface.h"
+
 #include "centralinterface.h"
 
 
@@ -37,7 +37,7 @@ bool msgtoProccessEmpty();
 bool send_t3();
 
 bool npt();
-class NearProccess{
+class CentralProccess{
 public:
 
     char *const EKITPORT = getenv("EKITPORT"); //enviormental varible
