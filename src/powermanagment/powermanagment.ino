@@ -2,8 +2,9 @@
 #include <Adafruit_INA219.h>
 
 Adafruit_INA219 ina219;
+Adafruit_INA219 ina219_B(0x41);
 
-
+Adafruit_INA219 ina219_C(0x44);
 void setup(void) 
 {
   Serial.begin(115200);
@@ -23,11 +24,9 @@ void setup(void)
     Serial.println("Failed to find INA219 chip");
     while (1) { delay(10); }
   }
-  // To use a slightly lower 32V, 1A range (higher precision on amps):
-  //ina219.setCalibration_32V_1A();
-  // Or to use a lower 16V, 400mA range (higher precision on volts and amps):
-  //ina219.setCalibration_16V_400mA();
 
+  ina219_B.begin();
+  ina219_C.begin();
   Serial.println("Measuring voltage and current with INA219 ...");
 }
 
@@ -50,6 +49,34 @@ void loop(void)
   Serial.print("Load Voltage:  "); Serial.print(loadvoltage); Serial.println(" V");
   Serial.print("Current:       "); Serial.print(current_mA); Serial.println(" mA");
   Serial.print("Power:         "); Serial.print(power_mW); Serial.println(" mW");
+  Serial.println("");
+
+  delay(2000);
+   shuntvoltage = ina219_B.getShuntVoltage_mV();
+  busvoltage = ina219_B.getBusVoltage_V();
+  current_mA = ina219_B.getCurrent_mA();
+  power_mW = ina219_B.getPower_mW();
+  loadvoltage = busvoltage + (shuntvoltage / 1000);
+  
+  Serial.print("Bus_B Voltage:   "); Serial.print(busvoltage); Serial.println(" V");
+  Serial.print("Shunt_B Voltage: "); Serial.print(shuntvoltage); Serial.println(" mV");
+  Serial.print("Load_B Voltage:  "); Serial.print(loadvoltage); Serial.println(" V");
+  Serial.print("Current_B:       "); Serial.print(current_mA); Serial.println(" mA");
+  Serial.print("Power_B:         "); Serial.print(power_mW); Serial.println(" mW");
+  Serial.println("");
+
+  delay(2000);
+   shuntvoltage = ina219_C.getShuntVoltage_mV();
+  busvoltage = ina219_C.getBusVoltage_V();
+  current_mA = ina219_C.getCurrent_mA();
+  power_mW = ina219_C.getPower_mW();
+  loadvoltage = busvoltage + (shuntvoltage / 1000);
+  
+  Serial.print("Bus_C Voltage:   "); Serial.print(busvoltage); Serial.println(" V");
+  Serial.print("Shunt_C Voltage: "); Serial.print(shuntvoltage); Serial.println(" mV");
+  Serial.print("Load_C Voltage:  "); Serial.print(loadvoltage); Serial.println(" V");
+  Serial.print("Current_C:       "); Serial.print(current_mA); Serial.println(" mA");
+  Serial.print("Power_C:         "); Serial.print(power_mW); Serial.println(" mW");
   Serial.println("");
 
   delay(2000);

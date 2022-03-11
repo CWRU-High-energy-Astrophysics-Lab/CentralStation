@@ -36,7 +36,7 @@ bool msgtoProccessEmpty();
 //Generalmsg decrypt(basic_string<char> msg);
 bool send_t3();
 
-bool npt();
+bool cpt();
 class CentralProccess{
 public:
 

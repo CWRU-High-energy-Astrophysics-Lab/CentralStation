@@ -13,6 +13,11 @@
 #include "networkcom.h"
 
 mutex mu;
+string user;
+bool restartingpi = false;
+bool getRestart(){
+    return restartingpi;
+}
 
 bool init() { //set baud rates and check file system layout
     msgToProccess = priority_queue<Generalmsg>();
@@ -23,16 +28,17 @@ bool init() { //set baud rates and check file system layout
     msgFromCentral = priority_queue<Generalmsg>();
 
 
+
+    user= "/home/"+ string(getenv("USER"));
     try{
-        filesystem::current_path("/home/$(USER)");
-        filesystem::current_path("/home/$(USER)/data/log");
+        filesystem::current_path(user);
+        filesystem::current_path(user+"/data");
+        filesystem::current_path(user+"/data/log");
+        filesystem::current_path(user+"/data/temp");
+        filesystem::current_path(user);
 
-        filesystem::current_path("/home/$(USER)/rsato_su_emu");
-        filesystem::current_path("/home/$(USER)/rsato_su_emu/bin");
-        filesystem::current_path("/home/$(USER)/rsato_su_emu/src");
-        system("make");
 
-        filesystem::current_path("/home/$(USER)");
+
     }
     catch (std::filesystem::filesystem_error const& ex) {
         cout<< "File system not as expected, please check\n";
@@ -45,19 +51,19 @@ bool init() { //set baud rates and check file system layout
 int main() {//this is called on pi boot
     if (init()) {
 
-        thread processThread(npt);
+        thread processThread(cpt);
 
         //Xbee thread
         //server thread
         thread serverThread(startServer);
 
-
+        serverThread.join();
         processThread.join();
 
 
 
 
-//start theads
+
 
 
 
@@ -65,7 +71,7 @@ int main() {//this is called on pi boot
     return 1;
 }
 
-bool npt() {
+bool cpt() {
     CentralProccess node = CentralProccess();
 
     return node.start();
@@ -110,7 +116,7 @@ int CentralProccess::start() {
                 //add a report to log
             }
         }
-        while(ismsgFromNetIn()==true){
+        while(ismsgFromNetIn()!=true){
             addmsgtoProccess(encrypt(getmsgToNetIn()));
         }
 
